@@ -1,1 +1,1 @@
-[2026-02-03 02:00:00] Refactored 'app.py'. Extracted login and dashboard HTML/CSS into 'test/templates/login.html' and 'test/templates/dashboard.html'. Updated 'app.py' to use 'render_template'.
+[2026-02-03 02:09:00] Integrated SQLite database with Flask-SQLAlchemy. Refactored 'app.py' for DB-based user authentication and admin management. Updated 'dashboard.html' and added 'admin_management.html' template. Installed Flask-SQLAlchemy dependency.

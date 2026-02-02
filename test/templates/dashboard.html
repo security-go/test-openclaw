@@ -27,7 +27,8 @@
             <div class="sidebar">
                 <h3>Menu</h3>
                 <ul>
-                    <li><a href="#">Dashboard Home</a></li>
+                    <li><a href="{{ url_for('dashboard') }}">Dashboard Home</a></li>
+                    <li><a href="{{ url_for('admin_management') }}">Admin Management</a></li>
                     <li><a href="#">Users</a></li>
                     <li><a href="#">Settings</a></li>
                     <li><a href="#">Reports</a></li>
@@ -39,13 +40,22 @@
             </div>
             <div class="main-content">
                 <div class="header">
-                    <h1>Welcome, {{ session.username }}!</h1>
+                    <h1>Welcome, {{ username }}!</h1>
                     <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
                 </div>
                 <div class="content-area">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            <ul class="flashes">
+                                {% for category, message in messages %}
+                                    <li class="{{ category }}">{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    {% endwith %}
                     <h2>Main Content Area</h2>
                     <p>This is where the details of your selected menu item will be displayed.</p>
-                    <p>You are logged in as <strong>{{ session.username }}</strong>.</p>
+                    <p>You are logged in as <strong>{{ username }}</strong>.</p>
                     <p>Use the menu on the left to navigate through the application.</p>
                 </div>
             </div>
