@@ -1,0 +1,53 @@
+<!doctype html>
+        <html lang="en">
+        <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Dashboard</title>
+            <style>
+                body { display: flex; margin: 0; font-family: sans-serif; background-color: #f0f2f5;}
+                .sidebar { width: 250px; background-color: #ffffff; padding: 20px; height: 100vh; box-shadow: 2px 0 5px rgba(0,0,0,0.1); overflow-y: auto; display: flex; flex-direction: column;}
+                .sidebar h3 { margin-top: 0; color: #333; text-align: center; margin-bottom: 25px; font-size: 22px;}
+                .sidebar ul { list-style: none; padding: 0; flex-grow: 1;}
+                .sidebar ul li { margin-bottom: 15px; }
+                .sidebar ul li a { text-decoration: none; color: #555; display: block; padding: 10px 12px; border-radius: 5px; transition: background-color 0.2s ease;}
+                .sidebar ul li a:hover { background-color: #e9ecef; color: #007bff; }
+                .sidebar .footer { text-align: center; font-size: 12px; color: #aaa; margin-top: auto; padding-top: 20px;}
+                .main-content { flex-grow: 1; height: 100vh; overflow-y: auto; display: flex; flex-direction: column; }
+                .header { background-color: #ffffff; padding: 15px 25px; border-bottom: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+                .header h1 { margin: 0; color: #333; font-size: 26px; font-weight: 600; }
+                .header .logout-button { padding: 10px 18px; background-color: #d9534f; color: white; border: none; border-radius: 5px; cursor: pointer; text-decoration: none; font-size: 14px; transition: background-color 0.2s ease;}
+                .header .logout-button:hover { background-color: #c9302c; }
+                .content-area { flex-grow: 1; padding: 30px; background-color: #ffffff; margin: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+                .content-area h2 { margin-top: 0; color: #444; font-size: 28px; margin-bottom: 20px; }
+                .content-area p { color: #555; font-size: 16px; line-height: 1.6; }
+            </style>
+        </head>
+        <body>
+            <div class="sidebar">
+                <h3>Menu</h3>
+                <ul>
+                    <li><a href="#">Dashboard Home</a></li>
+                    <li><a href="#">Users</a></li>
+                    <li><a href="#">Settings</a></li>
+                    <li><a href="#">Reports</a></li>
+                    <li><a href="#">System Logs</a></li>
+                </ul>
+                <div class="footer">
+                    &copy; 2026 Your Company
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="header">
+                    <h1>Welcome, {{ session.username }}!</h1>
+                    <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+                </div>
+                <div class="content-area">
+                    <h2>Main Content Area</h2>
+                    <p>This is where the details of your selected menu item will be displayed.</p>
+                    <p>You are logged in as <strong>{{ session.username }}</strong>.</p>
+                    <p>Use the menu on the left to navigate through the application.</p>
+                </div>
+            </div>
+        </body>
+        </html>
