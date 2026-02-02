@@ -1,1 +1,1 @@
-[2026-02-03 02:09:00] Integrated SQLite database with Flask-SQLAlchemy. Refactored 'app.py' for DB-based user authentication and admin management. Updated 'dashboard.html' and added 'admin_management.html' template. Installed Flask-SQLAlchemy dependency.
+[2026-02-03 02:17:00] Improved login screen aesthetics using Bootstrap 5 and customized CSS. Added icons and a modern card layout to 'test/templates/login.html'.
