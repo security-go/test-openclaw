@@ -15,13 +15,9 @@ db = SQLAlchemy(app)
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
+    name = db.Column(db.String(80), nullable=False) # Added name column
+    email = db.Column(db.String(120), unique=True, nullable=False) # Added email column
     password_hash = db.Column(db.String(120), nullable=False)
-
-    def set_password(self, password):
-        self.password_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
-
-    def check_password(self, password):
-        return self.password_hash == hashlib.sha256(password.encode('utf-8')).hexdigest()
 
 class AuditLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -46,8 +42,9 @@ def log_action(action, details):
 # --- Database Initialization ---
 with app.app_context():
     db.create_all()
+    # Check if admin user exists before creating
     if not User.query.filter_by(username='admin').first():
-        admin_user = User(username='admin')
+        admin_user = User(username='admin', name='Admin User', email='admin@example.com') # Added default name and email for admin
         admin_user.set_password('password123')
         db.session.add(admin_user)
         db.session.commit()
@@ -90,16 +87,29 @@ def admin_management():
         if action == 'add':
             new_username = request.form.get('new_username')
             new_password = request.form.get('new_password')
-            if new_username and new_password:
+            new_name = request.form.get('new_name')  # Get name
+            new_email = request.form.get('new_email') # Get email
+
+            # Check if all required fields are present
+            if new_username and new_password and new_name and new_email:
+                # Check if username already exists
                 if User.query.filter_by(username=new_username).first():
-                    flash(f'User {new_username} exists.', 'error')
+                    flash(f'User {new_username} already exists.', 'error')
+                # Check if email already exists
+                elif User.query.filter_by(email=new_email).first():
+                    flash(f'Email {new_email} already exists.', 'error')
                 else:
-                    user = User(username=new_username)
+                    # Create new user with name and email
+                    user = User(username=new_username, name=new_name, email=new_email)
                     user.set_password(new_password)
                     db.session.add(user)
                     db.session.commit()
-                    log_action('CREATE_USER', f'Created admin user: {new_username}')
-                    flash(f'User {new_username} created.', 'success')
+                    # Update log message to include new details
+                    log_action('CREATE_USER', f'Created admin user: {new_username} (Name: {new_name}, Email: {new_email})')
+                    flash(f'User {new_username} created successfully.', 'success')
+            else:
+                # Handle case where not all fields are provided
+                flash('Please fill in all required fields (Username, Password, Name, Email).', 'error')
         return redirect(url_for('admin_management'))
 
     users = User.query.all()
@@ -115,9 +125,10 @@ def delete_admin(user_id):
         flash('Cannot delete default admin.', 'error')
     else:
         uname = user.username
+        email = user.email # Get email for logging
         db.session.delete(user)
         db.session.commit()
-        log_action('DELETE_USER', f'Deleted admin user: {uname}')
+        log_action('DELETE_USER', f'Deleted admin user: {uname} (Email: {email})')
         flash(f'User {uname} deleted.', 'success')
     return redirect(url_for('admin_management'))
 
